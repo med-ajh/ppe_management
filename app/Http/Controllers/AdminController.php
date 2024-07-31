@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Department;
 use App\Models\CostCenter;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -41,8 +42,35 @@ class AdminController extends Controller
         $costCenters = CostCenter::all();
 
         // Example recent activities (replace with actual implementation)
-        $recentActivities = \App\Models\Activity::latest()->limit(5)->get();
+        $recentActivities = Activity::latest()->limit(5)->get();
 
         return view('admin.dashboard', compact('users', 'departments', 'costCenters', 'recentActivities'));
+    }
+
+    /**
+     * Store a new activity record.
+     *
+     * @param string $description
+     * @param int $userId
+     */
+    protected function logActivity($description, $userId)
+    {
+        Activity::create([
+            'description' => $description,
+            'user_id' => $userId,
+        ]);
+    }
+
+    /**
+     * An example method where an activity might be logged.
+     */
+    public function someAction(Request $request)
+    {
+        // Your action logic here
+
+        // Log activity
+        $this->logActivity('User performed some action.', auth()->id());
+
+        // Redirect or return view
     }
 }

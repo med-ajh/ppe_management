@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Department;
-use App\Models\CostCenter;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Activity;
+use App\Models\Department;
 
 class UserController extends Controller
 {
@@ -17,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('department', 'costCenter')->get();
-        return view('admin.users.index', compact('users'));
+        return view('admin.dashboard', compact('users'));
     }
 
     /**
@@ -58,7 +58,7 @@ class UserController extends Controller
             'cost_center_id' => $request->input('cost_center_id'),
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
+        return redirect()->route('admin.dashboard')->with('success', 'User created successfully.');
     }
 
     /**
@@ -101,7 +101,7 @@ class UserController extends Controller
             'cost_center_id' => $request->input('cost_center_id'),
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('admin.dashboard')->with('success', 'User updated successfully.');
     }
 
     /**
@@ -113,7 +113,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('admin.dashboard')->with('success', 'User deleted successfully.');
     }
 
     /**
