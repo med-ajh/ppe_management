@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -41,7 +40,7 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
         $departments = Department::all();
-        $costCenters = CostCenter::all();
+        $costCenters = CostCenter::all(); // Fetch cost centers
 
         return view('auth.register', compact('departments', 'costCenters'));
     }
@@ -56,6 +55,8 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'te' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', 'in:admin,manager,employee'],
@@ -75,10 +76,12 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'lastname' => $data['lastname'],
+            'te' => $data['te'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
             'department_id' => $data['department_id'],
-            'cost_center_id' => $data['role'] === 'manager' ? $data['cost_center_id'] : null,
+            'cost_center_id' => $data['role'] === 'manager' ? $data['cost_center_id'] : null, // Assign cost center if role is manager
         ]);
     }
 

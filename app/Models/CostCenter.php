@@ -9,11 +9,10 @@ class CostCenter extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'department_id'];
 
-    // Relationships
-    public function managers()
+    public function department()
     {
-        return $this->hasMany(User::class, 'cost_center_id');
+        return $this->belongsTo(Department::class);
     }
 }
