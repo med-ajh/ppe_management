@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,9 +10,13 @@ class Department extends Model
 
     protected $fillable = ['name'];
 
-    // Relationships
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function costCenters()
+    {
+        return $this->hasMany(CostCenter::class);
     }
 }

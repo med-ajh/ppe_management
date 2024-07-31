@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'password', 'role', 'department', 'cost_center', 'manager_id',
+        'name', 'lastname', 'te', 'email', 'password', 'role', 'department_id', 'cost_center_id', 'manager_id',
 
     ];
 
@@ -54,5 +54,17 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'manager_id');
     }
 
-    
+
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function costCenter()
+    {
+        return $this->belongsTo(CostCenter::class);
+    }
+
+
 }
