@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -7,6 +8,8 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Models\Department;
+use App\Models\CostCenter;
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller
@@ -31,6 +34,19 @@ class RegisterController extends Controller
     }
 
     /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showRegistrationForm()
+    {
+        $departments = Department::all();
+        $costCenters = CostCenter::all();
+
+        return view('auth.register', compact('departments', 'costCenters'));
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
@@ -42,7 +58,9 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'string', 'in:admin,manager,employee'], // Ensure role is validated
+            'role' => ['required', 'string', 'in:admin,manager,employee'],
+            'department_id' => ['required', 'exists:departments,id'],
+            'cost_center_id' => ['nullable', 'exists:cost_centers,id'],
         ]);
     }
 
@@ -58,7 +76,9 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role' => $data['role'], // Save the role
+            'role' => $data['role'],
+            'department_id' => $data['department_id'],
+            'cost_center_id' => $data['role'] === 'manager' ? $data['cost_center_id'] : null,
         ]);
     }
 
@@ -67,7 +87,7 @@ class RegisterController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  mixed  $user
-     * @return mixed
+     * @return \Illuminate\Http\RedirectResponse
      */
     protected function registered(Request $request, $user)
     {
