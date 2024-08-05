@@ -19092,7 +19092,7 @@ label,
 }
 
 .bg-gradient-info {
-    background-image: linear-gradient(310deg, #EA8003 0%, #EA8003 30%,#fbcf33 50%,#EA8003 70%, #EA8003 100%);
+    background-image: linear-gradient(310deg, #EA8003 0%, #EA8003 100%);
 }
 
 .bg-gradient-warning {
@@ -19785,7 +19785,7 @@ hr.horizontal.gray-light {
 .navbar-vertical .navbar-brand > img,
 .navbar-vertical .navbar-brand-img {
   max-width: 100%;
-  max-height: 2rem;
+  max-height: 4rem;
 }
 .navbar-vertical .navbar-nav .nav-link {
   padding-left: 1rem;
@@ -20435,16 +20435,14 @@ hr.horizontal.gray-light {
   transition: all 0.1s ease;
 }
 .sidenav .navbar-brand {
-  padding: 1.5rem 2rem;
+  padding: 0.5rem 3rem;
 }
 
 .sidenav-header {
-  height: 4.875rem;
+  height: 7.575rem;
 }
 
-.sidenav-footer .card.card-background:after {
-  opacity: 0.65;
-}
+
 
 .g-sidenav-show .sidenav .nav-item .collapse {
   height: auto;

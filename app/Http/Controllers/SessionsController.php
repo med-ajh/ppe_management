@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-
 
 class SessionsController extends Controller
 {
@@ -17,26 +14,32 @@ class SessionsController extends Controller
     public function store()
     {
         $attributes = request()->validate([
-            'email'=>'required|email',
-            'password'=>'required'
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
 
-        if(Auth::attempt($attributes))
-        {
+        if (Auth::attempt($attributes)) {
             session()->regenerate();
-            return redirect('dashboard')->with(['success'=>'You are logged in.']);
-        }
-        else{
+            $user = Auth::user();
 
-            return back()->withErrors(['email'=>'Email or password invalid.']);
+            // Redirect based on user role without success message
+            if ($user->role === 'admin') {
+                return redirect('admin/dashboard');
+            } elseif ($user->role === 'manager') {
+                return redirect('manager/dashboard');
+            } elseif ($user->role === 'employee') {
+                return redirect('employee/dashboard');
+            } else {
+                return redirect('home');
+            }
+        } else {
+            return back()->withErrors(['email' => 'Email or password invalid.']);
         }
     }
 
     public function destroy()
     {
-
         Auth::logout();
-
-        return redirect('/login')->with(['success'=>'You\'ve been logged out.']);
+        return redirect('/login');
     }
 }
