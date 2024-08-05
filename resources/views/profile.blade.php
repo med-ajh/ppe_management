@@ -151,20 +151,20 @@
                     @endif
 
                     <!-- Display Personal Information -->
-                    <p class="mb-2" style="font-size: 1.1rem;"><strong>TE ID:</strong> {{ $user->te }}</p>
+                    <p class="mb-2" style="font-size: 1.1rem;"><strong>TE ID :</strong> {{ $user->te }}</p>
 
             <!-- Additional Information Section -->
                 <!-- Display Department Name -->
-                <p class="mb-2" style="font-size: 1.1rem;"><strong>Department:</strong> {{ $user->department ? $user->department->name : 'N/A' }}</p>
+                <p class="mb-2" style="font-size: 1.1rem;"><strong>Department :</strong> {{ $user->departement ? $user->departement->name : 'N/A' }}</p>
 
                 @if($user->role === 'manager' || $user->role === 'employee')
                     <!-- Display Cost Center Name -->
-                    <p class="mb-2" style="font-size: 1.1rem;"><strong>Cost Center:</strong> {{ $user->costCenter ? $user->costCenter->name : 'N/A' }}</p>
+                    <p class="mb-2" style="font-size: 1.1rem;"><strong>Cost Center :</strong> {{ $user->costCenter ? $user->costCenter->name : 'N/A' }}</p>
                 @endif
 
                 @if($user->role === 'employee')
                     <!-- Display Manager's Name -->
-                    <p class="mb-2" style="font-size: 1.1rem;"><strong>Manager:</strong> {{ $user->manager ? $user->manager->name : 'N/A' }}</p>
+                    <p class="mb-2" style="font-size: 1.1rem;"><strong>Manager :</strong> {{ $user->manager ? $user->manager->name : 'N/A' }}</p>
                 @endif
             </form>
 

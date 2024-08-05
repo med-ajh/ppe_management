@@ -14,13 +14,17 @@ use App\Http\Controllers\EmployeeDashboardController;
 // Routes for Admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    // Add other admin routes here
+    Route::get('/admin/employees', [AdminDashboardController::class, 'employees'])->name('admin.employees');
+    Route::get('/admin/managers', [AdminDashboardController::class, 'managers'])->name('admin.managers');
+    Route::get('/admin/users', [AdminDashboardController::class, 'users'])->name('admin.users');
+
+
 });
 
 // Routes for Manager
 Route::middleware(['auth', 'role:manager'])->group(function () {
     Route::get('/manager/dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
-    // Add other manager routes here
+    Route::get('/manager/employees', [ManagerDashboardController::class, 'employees'])->name('manager.employees');
 });
 
 // Routes for Employee

@@ -5,7 +5,7 @@
                 <div class="copyright text-center text-sm text-muted text-lg-start">
                     © <script>
                         document.write(new Date().getFullYear())
-                    </script>, made  <i class="fa fa-heart"></i> by
+                    </script>, made  with <i class="fa fa-heart"></i> by
                     <a href="https://www.instagram.com/med__ajh" class="font-weight-bold" target="_blank">Med Ajh</a>
                 </div>
             </div>
