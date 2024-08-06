@@ -42,7 +42,7 @@
       </ul>
       <ul class="navbar-nav d-lg-block d-none">
         <li class="nav-item">
-          <a href="https://www.instagram.com/med__ajh" target="_blank" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-{{ (Request::is('static-sign-up') ? 'light' : 'dark') }}">Med Ajh</a>
+          <a href="https://www.linkedin.com/in/mohammed-ajiach-772880246/" target="_blank" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-{{ (Request::is('static-sign-up') ? 'light' : 'dark') }}">PPE Management</a>
         </li>
       </ul>
     </div>

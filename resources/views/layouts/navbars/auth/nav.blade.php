@@ -33,11 +33,13 @@
                 </div>
                 </a>
             </li>
+
             <li class="nav-item px-3 d-flex align-items-center">
                 <a href="javascript:;" class="nav-link text-body p-0">
-                <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+                    <i class="fa fa-shopping-basket fixed-plugin-button-nav cursor-pointer"></i>
                 </a>
             </li>
+
             <li class="nav-item dropdown pe-2 d-flex align-items-center">
                 <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-bell cursor-pointer"></i>
@@ -51,7 +53,7 @@
                         </div>
                         <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
-                            <span class="font-weight-bold">New message</span> from Laur
+                            <span class="font-weight-bold">New requets made by</span> imane alamin
                         </h6>
                         <p class="text-xs text-secondary mb-0">
                             <i class="fa fa-clock me-1"></i>
@@ -61,24 +63,7 @@
                     </div>
                     </a>
                 </li>
-                <li class="mb-2">
-                    <a class="dropdown-item border-radius-md" href="javascript:;">
-                    <div class="d-flex py-1">
-                        <div class="my-auto">
-                        <img src="../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
-                        </div>
-                        <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                            <span class="font-weight-bold">New album</span> by Travis Scott
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                            <i class="fa fa-clock me-1"></i>
-                            1 day
-                        </p>
-                        </div>
-                    </div>
-                    </a>
-                </li>
+
                 <li>
                     <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
@@ -99,7 +84,7 @@
                         </div>
                         <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
-                            Payment successfully completed
+                            Request no 189 successfully completed
                         </h6>
                         <p class="text-xs text-secondary mb-0">
                             <i class="fa fa-clock me-1"></i>

@@ -8,7 +8,7 @@
               Copyright © <script>
                 document.write(new Date().getFullYear())
               </script> PPE Management by
-              <a style="color: #252f40;" href="https://www.instagram.com/med__ajh/" class="font-weight-bold ml-1" target="_blank">Med Ajh</a>
+              <a style="color: #252f40;" href="https://www.linkedin.com/in/mohammed-ajiach-772880246/" class="font-weight-bold ml-1" target="_blank">Med Ajh</a>
 
             </p>
           </div>

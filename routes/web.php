@@ -14,9 +14,14 @@ use App\Http\Controllers\EmployeeDashboardController;
 // Routes for Admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/admin/employees', [AdminDashboardController::class, 'employees'])->name('admin.employees');
-    Route::get('/admin/managers', [AdminDashboardController::class, 'managers'])->name('admin.managers');
-    Route::get('/admin/users', [AdminDashboardController::class, 'users'])->name('admin.users');
+    Route::get('employees', [AdminDashboardController::class, 'employees'])->name('admin.employees');
+    Route::get('managers', [AdminDashboardController::class, 'managers'])->name('admin.managers');
+
+    Route::get('/users', [AdminDashboardController::class, 'users'])->name('admin.users.index');
+    Route::get('/admin/users/{user}/edit', [AdminDashboardController::class, 'editUser'])->name('admin.users.edit');
+    Route::put('/users/{user}', [AdminDashboardController::class, 'updateUser'])->name('admin.users.update');
+    Route::delete('/users/{user}', [AdminDashboardController::class, 'destroy'])->name('admin.users.destroy');
+    Route::get('/users/{user}', [AdminDashboardController::class, 'show'])->name('admin.users.show');
 
 
 });
@@ -24,8 +29,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 // Routes for Manager
 Route::middleware(['auth', 'role:manager'])->group(function () {
     Route::get('/manager/dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
-    Route::get('/manager/employees', [ManagerDashboardController::class, 'employees'])->name('manager.employees');
+
+    Route::get('/manager/employees', [ManagerDashboardController::class, 'employees'])->name('manager.employees.index');
+    Route::get('/manager/employees/{id}', [ManagerDashboardController::class, 'show'])->name('manager.employees.show');
+    Route::get('/manager/employees/create', [ManagerDashboardController::class, 'create'])->name('manager.employees.create');
+    Route::post('/manager/employees', [ManagerDashboardController::class, 'store'])->name('manager.employees.store');
+    Route::delete('/manager/employees/{id}', [ManagerDashboardController::class, 'destroy'])->name('manager.employees.destroy');
+
+
 });
+
+
 
 // Routes for Employee
 Route::middleware(['auth', 'role:employee'])->group(function () {

@@ -65,17 +65,17 @@
               <span class="nav-link-text ms-1">Profile</span>
             </a>
           </li>
+          @if (Auth::user()->role === 'admin' || Auth::user()->role === 'manager')
 
           <br>
           <li class="nav-item mt-2">
-            @if (Auth::user()->role === 'admin' || Auth::user()->role === 'manager')
 
               <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Users Management</h6>
               @endif
           </li>
           <li class="nav-item">
             @if (Auth::user()->role === 'admin')
-              <a class="nav-link {{ (Request::is('admin/users') ? 'active' : '') }}" href="{{ url('admin/users') }}">
+              <a class="nav-link {{ (Request::is('users') ? 'active' : '') }}" href="{{ url('users') }}">
                 <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i class="fas fa-users"></i>
                 </div>
@@ -87,7 +87,7 @@
           <li class="nav-item">
             @if (Auth::user()->role === 'admin')
 
-              <a class="nav-link {{ (Request::is('admin/managers') ? 'active' : '') }}" href="{{ url('admin/managers') }}">
+              <a class="nav-link {{ (Request::is('managers') ? 'active' : '') }}" href="{{ url('managers') }}">
                 <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i class="fas fa-user-tie"></i>
                 </div>
@@ -98,7 +98,7 @@
 
             <li class="nav-item">
                 @if (Auth::user()->role === 'admin' || Auth::user()->role === 'manager')
-                  <a class="nav-link {{ (Request::is(Auth::user()->role === 'admin' ? 'admin/employees' : 'manager/employees') ? 'active' : '') }}" href="{{ Auth::user()->role === 'admin' ? url('admin/employees') : url('manager/employees') }}">
+                  <a class="nav-link {{ (Request::is(Auth::user()->role === 'admin' ? 'employees' : 'manager/employees') ? 'active' : '') }}" href="{{ Auth::user()->role === 'admin' ? url('employees') : url('manager/employees') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                       <i class="fas fa-briefcase"></i>
                     </div>
@@ -107,11 +107,90 @@
                 @endif
               </li>
 
-            <br>
-            <li class="nav-item mt-2">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Users Management</h6>
-            </li>
+              @if (Auth::user()->role === 'admin' || Auth::user()->role === 'manager')
 
+
+              <br>
+
+              <li class="nav-item mt-2">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Inventory Management</h6>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link {{ (Request::is('items') ? 'active' : '') }}" href="{{ url('items') }}">
+                  <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-box"></i>
+                  </div>
+                  <span class="nav-link-text ms-1">Items</span>
+                </a>
+              </li>
+                @endif
+
+              <br>
+              <li class="nav-item mt-2">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Request Management</h6>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link {{ (Request::is('requests/create') ? 'active' : '') }}" href="{{ url('requests/create') }}">
+                  <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-plus"></i>
+                  </div>
+                  <span class="nav-link-text ms-1">Make a Request</span>
+                </a>
+              </li>
+
+              @if (Auth::user()->role === 'admin' || Auth::user()->role === 'manager')
+              <li class="nav-item">
+                <a class="nav-link {{ (Request::is('requests/approve') ? 'active' : '') }}" href="{{ url('requests/approve') }}">
+                  <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                  <span class="nav-link-text ms-1">Approve Requests</span>
+                </a>
+              </li>
+            @endif
+
+              <li class="nav-item">
+                <a class="nav-link {{ (Request::is('requests') ? 'active' : '') }}" href="{{ url('requests') }}">
+                  <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-clipboard-list"></i>
+                  </div>
+                  <span class="nav-link-text ms-1">Follow My Requests</span>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link {{ (Request::is('history') ? 'active' : '') }}" href="{{ url('history') }}">
+                  <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-history"></i>
+                  </div>
+                  <span class="nav-link-text ms-1">History</span>
+                </a>
+              </li>
+
+              <br>
+              <li class="nav-item mt-2">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">TE Management</h6>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link {{ (Request::is('departments') ? 'active' : '') }}" href="{{ url('departments') }}">
+                  <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-building"></i>
+                  </div>
+                  <span class="nav-link-text ms-1">Departments</span>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link {{ (Request::is('cost-centers') ? 'active' : '') }}" href="{{ url('cost-centers') }}">
+                  <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                    <i class="fas fa-cogs"></i>
+                  </div>
+                  <span class="nav-link-text ms-1">Cost Centers</span>
+                </a>
+              </li>
 
         </ul>
       </div>
