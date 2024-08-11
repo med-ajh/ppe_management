@@ -37,20 +37,30 @@
         flex-shrink: 0; /* Prevent button from shrinking */
         margin: 0; /* Remove any default margin */
     }
+    .add-user-btn {
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: flex-end;
+    }
 </style>
 
 <div class="card">
     <div class="card-header">
-        <form action="{{ route('admin.users.index') }}" method="GET" class="search-form">
-            <input type="text" name="search" placeholder="Search users..." value="{{ request('search') }}" class="form-control">
-            <select name="role" class="form-control">
-                <option value="">All Roles</option>
-                <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
-                <option value="manager" {{ request('role') === 'manager' ? 'selected' : '' }}>Manager</option>
-                <option value="employee" {{ request('role') === 'employee' ? 'selected' : '' }}>Employee</option>
-            </select>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
+        <div class="d-flex justify-content-between">
+            <form action="{{ route('admin.users.index') }}" method="GET" class="search-form">
+                <input type="text" name="search" placeholder="Search users..." value="{{ request('search') }}" class="form-control">
+                <select name="role" class="form-control">
+                    <option value="">All Roles</option>
+                    <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="manager" {{ request('role') === 'manager' ? 'selected' : '' }}>Manager</option>
+                    <option value="employee" {{ request('role') === 'employee' ? 'selected' : '' }}>Employee</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <div class="add-user-btn">
+                <a href="{{ route('admin.users.create') }}" class="btn btn-success">Add User</a>
+            </div>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table align-items-center mb-0">
@@ -58,10 +68,10 @@
                 <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Full Name</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">TE ID</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Value Stream</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Department</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cost Center</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Manager</th>
                     <th class="text-secondary opacity-7"></th>
                 </tr>
@@ -97,17 +107,17 @@
                     </td>
                     <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">
-                            {{ $user->departement->name ?? 'N/A' }}
+                            {{ $user->valueStream->name ?? 'N/A' }}
                         </span>
                     </td>
                     <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">
-                            {{ $user->costCenter->name ?? 'N/A' }}
+                            {{ $user->department->name ?? 'N/A' }}
                         </span>
                     </td>
                     <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">
-                            {{ $user->manager ? $user->manager->name . ' ' . $user->manager->lastname : 'N/A' }}
+                            {{ $user->manager ? $user->manager->name . ' ' . $user->manager->lastname : '-' }}
                         </span>
                     </td>
                     <td class="align-middle">

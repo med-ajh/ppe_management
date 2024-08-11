@@ -1,57 +1,93 @@
 <?php
 
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Departement;
-use App\Models\CostCenter;
+use App\Models\Department;
+use App\Models\ValueStream;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
+    /**
+     * Show the registration form.
+     *
+     * @return \Illuminate\View\View
+     */
     public function showRegistrationForm()
     {
-        $departements = Departement::all();
-        $costCenters = CostCenter::all();
+        $departments = Department::all();
+        $valueStreams = ValueStream::all();
         $managers = User::where('role', 'manager')->get();
-        return view('session.register', compact('departements', 'costCenters', 'managers'));
+        return view('session.register', compact('departments', 'valueStreams', 'managers'));
     }
 
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:25',
-            'lastname' => 'required|string|max:25',
-            'te' => 'required|string|max:12|unique:users,te',
-            'email' => 'required|string|email|max:50|unique:users,email',
-            'password' => 'required|string|confirmed|min:8',
-            'role' => 'required|in:employee,manager,admin',
-            'departement_id' => 'required|integer',
-            'cost_center_id' => 'nullable|integer',
-            'manager_id' => 'nullable|integer',
-        ]);
+    /**
+     * Handle an incoming registration request.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
 
-        $userData = $request->only(['name', 'lastname', 'te', 'email', 'role', 'departement_id', 'cost_center_id', 'manager_id']);
-        $userData['password'] = Hash::make($request->password);
+     public function register(Request $request)
+     {
+         // Format TE ID
+         $te = $request->input('te');
+         if (!preg_match('/^TE\d{6}$/', $te)) {
+             return redirect()->back()->withErrors(['te' => 'TE ID must start with TE followed by exactly 6 digits.']);
+         }
 
-        $user = User::create($userData);
+         // Append @te.com if not present
+         $email = $request->input('email');
+         if (!str_contains($email, '@te.com')) {
+             $email .= '@te.com';
+         }
 
-        Auth::login($user);
+         $request->merge(['email' => $email]);
 
-        // Redirect based on the user's role
-        if ($user->role == 'admin') {
-            return redirect()->route('admin.dashboard');
-        } elseif ($user->role == 'manager') {
-            return redirect()->route('manager.dashboard');
-        } else {
-            return redirect()->route('employee.dashboard');
-        }
-    }
+         $request->validate([
+             'name' => 'required|string|max:25',
+             'lastname' => 'required|string|max:25',
+             'te' => 'required|string|max:8|unique:users,te',
+             'email' => 'required|string|email|max:50|unique:users,email',
+             'password' => 'required|string|confirmed|min:8',
+             'role' => 'required|in:employee,manager,admin',
+             'value_stream_id' => 'required|integer|exists:value_streams,id',
+             'department_id' => 'required|integer|exists:departments,id',
+             'manager_id' => 'nullable|integer|exists:users,id',
+             'cost_center' => 'nullable|string',
+         ]);
 
+         $userData = $request->only([
+             'name',
+             'lastname',
+             'te',
+             'email',
+             'role',
+             'value_stream_id',
+             'department_id',
+             'manager_id',
+             'cost_center'
+         ]);
+         $userData['password'] = Hash::make($request->password);
+
+         $user = User::create($userData);
+
+         Auth::login($user);
+
+         // Redirect based on the user's role
+         switch ($user->role) {
+             case 'admin':
+                 return redirect()->route('admin.dashboard');
+             case 'manager':
+                 return redirect()->route('manager.dashboard');
+             default:
+                 return redirect()->route('employee.dashboard');
+         }
+     }
 
 
 

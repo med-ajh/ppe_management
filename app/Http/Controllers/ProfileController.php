@@ -14,7 +14,12 @@ class ProfileController extends Controller
      */
     public function show()
     {
-        $user = Auth::user()->load(['departement', 'costCenter', 'manager']);
+        $user = Auth::user()->load(['department', 'valueStream', 'manager']);
+
+        // Ensure that the user is not null
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'User not found.');
+        }
 
         return view('profile', [
             'user' => $user

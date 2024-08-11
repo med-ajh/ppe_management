@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ManagerDashboardController;
 use App\Http\Controllers\EmployeeDashboardController;
+use App\Http\Controllers\DepartementController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\CostCenterController;
+
 
 // Routes for Admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -18,13 +22,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('managers', [AdminDashboardController::class, 'managers'])->name('admin.managers');
 
     Route::get('/users', [AdminDashboardController::class, 'users'])->name('admin.users.index');
-    Route::get('/admin/users/{user}/edit', [AdminDashboardController::class, 'editUser'])->name('admin.users.edit');
+    Route::get('/users/create', [AdminDashboardController::class, 'createUser'])->name('admin.users.create'); // Route to show the form for creating a new user
+    Route::post('/users', [AdminDashboardController::class, 'storeUser'])->name('admin.users.store'); // Route to store a newly created user
+    Route::get('/users/{user}/edit', [AdminDashboardController::class, 'editUser'])->name('admin.users.edit');
     Route::put('/users/{user}', [AdminDashboardController::class, 'updateUser'])->name('admin.users.update');
     Route::delete('/users/{user}', [AdminDashboardController::class, 'destroy'])->name('admin.users.destroy');
     Route::get('/users/{user}', [AdminDashboardController::class, 'show'])->name('admin.users.show');
-
-
 });
+
+
 
 // Routes for Manager
 Route::middleware(['auth', 'role:manager'])->group(function () {
@@ -52,8 +58,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
 
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
 
+    Route::resource('departements', DepartementController::class);
+    Route::resource('cost-centers', CostCenterController::class);
+    Route::resource('inventory', InventoryController::class);
+
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout');
 });
 

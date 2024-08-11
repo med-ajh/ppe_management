@@ -11,7 +11,7 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable;
 
     protected $fillable = [
-        'name', 'lastname', 'te', 'email', 'password', 'role', 'departement_id', 'cost_center_id', 'manager_id',
+        'name', 'lastname', 'te', 'email', 'password', 'role', 'value_stream_id', 'department_id', 'manager_id', 'cost_center',
     ];
 
     protected $hidden = [
@@ -34,14 +34,14 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'manager_id');
     }
 
-    public function departement()
+    public function department()
     {
-        return $this->belongsTo(Departement::class);
+        return $this->belongsTo(Department::class);
     }
 
-    public function costCenter()
+    public function valueStream()
     {
-        return $this->belongsTo(CostCenter::class);
+        return $this->belongsTo(ValueStream::class); // Note the use of camelCase and proper class name
     }
 
     public function isAdmin()
@@ -59,4 +59,3 @@ class User extends Authenticatable
         return $this->role === 'employee';
     }
 }
-
