@@ -2,12 +2,6 @@
 
 @section('content')
 
-<!-- Add the necessary CSS files manually -->
-<link href="{{ asset('assets/css/nucleo-icons.css') }}" rel="stylesheet" />
-<link href="{{ asset('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
-<link href="{{ asset('assets/css/soft-ui-dashboard.css') }}" rel="stylesheet" />
-<link href="{{ asset('assets/css/soft-ui-dashboard.css.map') }}" rel="stylesheet" />
-
 <div class="card">
     <div class="card-header">
         <h2 class="mb-0">Edit User</h2>
@@ -72,6 +66,7 @@
                     <label for="value_stream_id" class="form-label">Value Stream</label>
                     <select id="value_stream_id" name="value_stream_id" class="form-control">
                         <option value="">Select Value Stream</option>
+                        <!-- Assuming $valueStreams is passed to the view with available value streams -->
                         @foreach ($valueStreams as $valueStream)
                             <option value="{{ $valueStream->id }}" {{ old('value_stream_id', $user->value_stream_id) == $valueStream->id ? 'selected' : '' }}>
                                 {{ $valueStream->name }}
@@ -86,6 +81,7 @@
                     <label for="department_id" class="form-label">Department</label>
                     <select id="department_id" name="department_id" class="form-control" required>
                         <option value="">Select Department</option>
+                        <!-- Assuming $departments is passed to the view with available departments -->
                         @foreach ($departments as $department)
                             <option value="{{ $department->id }}" {{ old('department_id', $user->department_id) == $department->id ? 'selected' : '' }}>
                                 {{ $department->name }}
@@ -100,6 +96,7 @@
                     <label for="manager_id" class="form-label">Manager</label>
                     <select id="manager_id" name="manager_id" class="form-control">
                         <option value="">Select Manager</option>
+                        <!-- Assuming $managers is passed to the view with available managers -->
                         @foreach ($managers as $manager)
                             <option value="{{ $manager->id }}" {{ old('manager_id', $user->manager_id) == $manager->id ? 'selected' : '' }}>
                                 {{ $manager->name }} {{ $manager->lastname }}
@@ -118,106 +115,5 @@
         </form>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const departments = @json($departments);
-    const valueStreams = @json($valueStreams);
-    const managers = @json($managers);
-
-    const departmentSelect = document.getElementById('department_id');
-    const valueStreamSelect = document.getElementById('value_stream_id');
-    const roleSelect = document.getElementById('role');
-    const managerSelect = document.getElementById('manager_id');
-    const costCenterInput = document.getElementById('cost_center');
-    const costCenterContainer = document.getElementById('cost-center-container');
-    const emailInput = document.getElementById('email');
-    const teInput = document.getElementById('te');
-
-    // Populate departments based on the selected value stream
-    function populateDepartments(valueStreamId) {
-        departmentSelect.innerHTML = '<option value="">Select Department</option>';
-        if (!valueStreamId) return;
-
-        const filteredDepartments = departments.filter(department => department.value_stream_id === valueStreamId);
-
-        filteredDepartments.forEach(department => {
-            const option = document.createElement('option');
-            option.value = department.id;
-            option.textContent = department.name;
-            departmentSelect.appendChild(option);
-        });
-    }
-
-    // Role select change event
-    roleSelect.addEventListener('change', function() {
-        const role = roleSelect.value;
-
-        if (role === 'employee' || role === 'admin') {
-            costCenterContainer.style.display = 'block';
-            if (role === 'employee') {
-                managerSelect.style.display = 'block';
-            } else {
-                managerSelect.style.display = 'none';
-            }
-        } else if (role === 'manager') {
-            costCenterContainer.style.display = 'block';
-            departmentSelect.value = ''; // Reset department
-            departmentSelect.innerHTML = '<option value="">Select Department</option>'; // Clear departments
-            costCenterInput.value = ''; // Clear cost center
-        } else {
-            costCenterContainer.style.display = 'none';
-            managerSelect.style.display = 'none';
-            costCenterInput.value = ''; // Clear cost center
-        }
-    });
-
-    // Value stream select change event
-    valueStreamSelect.addEventListener('change', function() {
-        const valueStreamId = parseInt(valueStreamSelect.value);
-        populateDepartments(valueStreamId);
-    });
-
-    // Department select change event
-    departmentSelect.addEventListener('change', function() {
-        const departmentId = parseInt(departmentSelect.value);
-        const selectedDepartment = departments.find(department => department.id === departmentId);
-        if (selectedDepartment) {
-            costCenterInput.value = selectedDepartment.cost_center;
-        }
-    });
-
-    // Ensure TE input only allows 6 digits and adds TE prefix
-    teInput.addEventListener('input', function() {
-        const teValue = teInput.value.replace(/[^0-9]/g, '').slice(0, 6); // Remove non-digits and limit to 6 digits
-        teInput.value = `TE${teValue}`;
-    });
-
-    // Ensure email input only allows username
-    emailInput.addEventListener('input', function() {
-        const emailValue = emailInput.value.split('@')[0]; // Only the part before '@'
-        emailInput.value = `${emailValue}@te.com`;
-    });
-
-    // Initial population based on loaded data
-    const initialValueStreamId = parseInt(valueStreamSelect.value);
-    populateDepartments(initialValueStreamId);
-
-    const initialDepartmentId = parseInt(departmentSelect.value);
-    if (initialDepartmentId) {
-        const selectedDepartment = departments.find(department => department.id === initialDepartmentId);
-        if (selectedDepartment) {
-            costCenterInput.value = selectedDepartment.cost_center;
-        }
-    }
-
-    const initialRole = roleSelect.value;
-    if (initialRole === 'employee') {
-        managerSelect.style.display = 'block';
-    } else if (initialRole === 'manager' || initialRole === 'admin') {
-        managerSelect.style.display = 'none';
-    }
-});
-</script>
 
 @endsection

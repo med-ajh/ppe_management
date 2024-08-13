@@ -72,7 +72,6 @@
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Value Stream</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Department</th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cost center</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Manager</th>
                     <th class="text-secondary opacity-7"></th>
                 </tr>
@@ -116,17 +115,9 @@
                             {{ $user->department->name ?? 'N/A' }}
                         </span>
                     </td>
-
                     <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">
-                            {{ $user->cost_center ?? '-' }}
-                        </span>
-                    </td>
-
-
-                    <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">
-                            {{ $user->manager ? $user->manager->name . ' ' . $user->manager->lastname : '-' }}
+                            {{ $user->manager ? $user->manager->name . ' ' . $user->manager->lastname : '' }}
                         </span>
                     </td>
                     <td class="align-middle">

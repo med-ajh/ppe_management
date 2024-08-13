@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ManagerDashboardController;
 use App\Http\Controllers\EmployeeDashboardController;
-use App\Http\Controllers\DepartementController;
-use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\CostCenterController;
-
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ValueStreamController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\RequestController;
+use App\Http\Controllers\CartController;
 
 // Routes for Admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -28,24 +29,32 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/users/{user}', [AdminDashboardController::class, 'updateUser'])->name('admin.users.update');
     Route::delete('/users/{user}', [AdminDashboardController::class, 'destroy'])->name('admin.users.destroy');
     Route::get('/users/{user}', [AdminDashboardController::class, 'show'])->name('admin.users.show');
+
+    Route::resource('items', ItemController::class);
+
+
+
 });
 
 
 
 // Routes for Manager
+
 Route::middleware(['auth', 'role:manager'])->group(function () {
+    // Manager dashboard
     Route::get('/manager/dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
 
-    Route::get('/manager/employees', [ManagerDashboardController::class, 'employees'])->name('manager.employees.index');
-    Route::get('/manager/employees/{id}', [ManagerDashboardController::class, 'show'])->name('manager.employees.show');
-    Route::get('/manager/employees/create', [ManagerDashboardController::class, 'create'])->name('manager.employees.create');
-    Route::post('/manager/employees', [ManagerDashboardController::class, 'store'])->name('manager.employees.store');
-    Route::delete('/manager/employees/{id}', [ManagerDashboardController::class, 'destroy'])->name('manager.employees.destroy');
-
-
+    // Employee management
+    Route::prefix('manager/employees')->name('manager.employees.')->group(function () {
+        Route::get('/', [ManagerDashboardController::class, 'employees'])->name('index');
+        Route::get('/create', [ManagerDashboardController::class, 'create'])->name('create');
+        Route::post('/', [ManagerDashboardController::class, 'store'])->name('store');
+        Route::get('/{id}', [ManagerDashboardController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [ManagerDashboardController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [ManagerDashboardController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ManagerDashboardController::class, 'destroy'])->name('destroy');
+    });
 });
-
-
 
 // Routes for Employee
 Route::middleware(['auth', 'role:employee'])->group(function () {
@@ -59,13 +68,45 @@ Route::middleware('auth')->group(function () {
 
 
 
-    Route::resource('departements', DepartementController::class);
-    Route::resource('cost-centers', CostCenterController::class);
-    Route::resource('inventory', InventoryController::class);
+    Route::resource('valuestreams', ValueStreamController::class);
+    Route::resource('departments', DepartmentController::class);
+/*
+//request routes
+    Route::prefix('requests')->group(function () {
+        Route::get('create', [RequestController::class, 'listItems'])->name('requests.listItems');
+        Route::post('add-to-cart/{item}', [RequestController::class, 'addToCart'])->name('requests.addToCart');
+        Route::get('follow', [RequestController::class, 'follow'])->name('requests.follow');
+        Route::get('approve', [RequestController::class, 'approve'])->name('requests.approve');
+        Route::get('history', [RequestController::class, 'history'])->name('requests.history');
+    });
+*/
 
+
+
+
+Route::get('/requests/create', [CartController::class, 'create'])->name('requests.create');
+
+// Route to show details of a selected item
+Route::get('/requests/items/{id}', [CartController::class, 'showItemDetails'])->name('requests.items.show');
+
+// Route to handle adding an item to the cart
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+
+
+
+
+
+//cart request
+    Route::prefix('cart')->group(function () {
+        Route::get('view', [CartController::class, 'view'])->name('cart.view');
+        Route::post('confirm', [CartController::class, 'confirmRequest'])->name('cart.confirmRequest');
+    });
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout');
-});
+
+
+
+    });
 
 
 
@@ -82,3 +123,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/reset-password/{token}', [ResetController::class, 'resetPass'])->name('password.reset');
     Route::post('/reset-password', [ChangePasswordController::class, 'changePassword'])->name('password.update');
 });
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/'); // or wherever you want to redirect after logout
+})->name('logout');
