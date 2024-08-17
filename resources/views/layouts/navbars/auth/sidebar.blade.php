@@ -132,7 +132,7 @@
               </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ (Request::is('requests/create') ? 'active' : '') }}" href="{{ url('requests/create') }}">
+                    <a class="nav-link {{ (Request::is('requests') ? 'active' : '') }}" href="{{ url('requests') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fas fa-plus"></i>
                     </div>
@@ -152,7 +152,7 @@
                 @endif
 
                 <li class="nav-item">
-                    <a class="nav-link {{ (Request::is('requests') ? 'active' : '') }}" href="{{ url('requests') }}">
+                    <a class="nav-link {{ (Request::is('requests/follow') ? 'active' : '') }}" href="{{ url('requests/follow') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fas fa-clipboard-list"></i>
                     </div>

@@ -32,8 +32,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::resource('items', ItemController::class);
 
-
-
+    Route::get('/admin/requests', [RequestController::class, 'adminIndex'])->name('requests.admin.index');
+    Route::get('/admin/requests/{cartId}', [RequestController::class, 'show'])->name('requests.admin.show');
+    Route::get('/admin/requests/history', [RequestController::class, 'requestHistory'])->name('requests.admin.history');
 });
 
 
@@ -54,6 +55,11 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
         Route::put('/{id}', [ManagerDashboardController::class, 'update'])->name('update');
         Route::delete('/{id}', [ManagerDashboardController::class, 'destroy'])->name('destroy');
     });
+
+
+
+
+
 });
 
 // Routes for Employee
@@ -70,37 +76,21 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('valuestreams', ValueStreamController::class);
     Route::resource('departments', DepartmentController::class);
-/*
-//request routes
-    Route::prefix('requests')->group(function () {
-        Route::get('create', [RequestController::class, 'listItems'])->name('requests.listItems');
-        Route::post('add-to-cart/{item}', [RequestController::class, 'addToCart'])->name('requests.addToCart');
-        Route::get('follow', [RequestController::class, 'follow'])->name('requests.follow');
-        Route::get('approve', [RequestController::class, 'approve'])->name('requests.approve');
-        Route::get('history', [RequestController::class, 'history'])->name('requests.history');
-    });
-*/
+
+// User routes
+Route::get('/requests', [RequestController::class, 'index'])->name('requests.index');
+Route::post('/cart/store', [RequestController::class, 'store'])->name('requests.store');
+Route::get('/cart', [RequestController::class, 'showCart'])->name('requests.cart');
+Route::post('/cart/confirm', [RequestController::class, 'confirmRequests'])->name('requests.confirmRequests');
+Route::get('/requests/follow', [RequestController::class, 'followRequest'])->name('requests.followRequest');
+Route::get('/requests/progress/{cartId}', [RequestController::class, 'showRequestProgress'])->name('requests.showRequestProgress');
+Route::delete('/cart/item/{cartItem}', [RequestController::class, 'removeItem'])->name('requests.removeItem');
+Route::get('/cart/item/edit/{cartItem}', [RequestController::class, 'editItem'])->name('requests.editItem');
+Route::post('/cart/item/update/{cartItem}', [RequestController::class, 'updateItem'])->name('requests.updateItem');
+Route::get('/history', [RequestController::class, 'History'])->name('requests.History');
 
 
 
-
-Route::get('/requests/create', [CartController::class, 'create'])->name('requests.create');
-
-// Route to show details of a selected item
-Route::get('/requests/items/{id}', [CartController::class, 'showItemDetails'])->name('requests.items.show');
-
-// Route to handle adding an item to the cart
-Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-
-
-
-
-
-//cart request
-    Route::prefix('cart')->group(function () {
-        Route::get('view', [CartController::class, 'view'])->name('cart.view');
-        Route::post('confirm', [CartController::class, 'confirmRequest'])->name('cart.confirmRequest');
-    });
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout');
 
