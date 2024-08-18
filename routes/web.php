@@ -32,9 +32,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::resource('items', ItemController::class);
 
-    Route::get('/admin/requests', [RequestController::class, 'adminIndex'])->name('requests.admin.index');
-    Route::get('/admin/requests/{cartId}', [RequestController::class, 'show'])->name('requests.admin.show');
-    Route::get('/admin/requests/history', [RequestController::class, 'requestHistory'])->name('requests.admin.history');
+
+Route::get('admin/requests', [RequestController::class, 'adminIndex'])->name('requests.admin.index');
+Route::get('admin/requests/{cartId}', [RequestController::class, 'show'])->name('requests.admin.show');
+
+
 });
 
 
@@ -77,19 +79,23 @@ Route::middleware('auth')->group(function () {
     Route::resource('valuestreams', ValueStreamController::class);
     Route::resource('departments', DepartmentController::class);
 
-// User routes
-Route::get('/requests', [RequestController::class, 'index'])->name('requests.index');
-Route::post('/cart/store', [RequestController::class, 'store'])->name('requests.store');
-Route::get('/cart', [RequestController::class, 'showCart'])->name('requests.cart');
-Route::post('/cart/confirm', [RequestController::class, 'confirmRequests'])->name('requests.confirmRequests');
-Route::get('/requests/follow', [RequestController::class, 'followRequest'])->name('requests.followRequest');
-Route::get('/requests/progress/{cartId}', [RequestController::class, 'showRequestProgress'])->name('requests.showRequestProgress');
-Route::delete('/cart/item/{cartItem}', [RequestController::class, 'removeItem'])->name('requests.removeItem');
-Route::get('/cart/item/edit/{cartItem}', [RequestController::class, 'editItem'])->name('requests.editItem');
-Route::post('/cart/item/update/{cartItem}', [RequestController::class, 'updateItem'])->name('requests.updateItem');
-Route::get('/history', [RequestController::class, 'History'])->name('requests.History');
 
 
+
+// Request routes
+Route::get('requests', [RequestController::class, 'index'])->name('requests.index');
+Route::post('requests', [RequestController::class, 'store'])->name('requests.store');
+Route::get('requests/history', [RequestController::class, 'history'])->name('requests.history');
+Route::get('requests/progress/{cartId}', [RequestController::class, 'showRequestProgress'])->name('requests.progress');
+Route::get('requests/follow', [RequestController::class, 'followRequest'])->name('requests.follow');
+
+// Cart routes
+Route::get('cart/show', [CartController::class, 'show'])->name('cart.show');
+Route::post('cart/confirm', [CartController::class, 'confirmRequests'])->name('cart.confirmRequests');
+
+
+Route::get('/cart/show', [CartController::class, 'show'])->name('cart.show');
+Route::post('/cart/confirm', [CartController::class, 'confirmRequests'])->name('cart.confirmRequests');
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout');

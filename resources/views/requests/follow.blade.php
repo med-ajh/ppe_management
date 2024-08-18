@@ -2,72 +2,51 @@
 
 @section('content')
 <div class="container mt-5">
-    <h1 class="text-center mb-5">My Active Requests</h1>
+    <h2 class="mb-4">Your Requests</h2>
 
-    @if($carts->isEmpty())
-        <div class="alert alert-info text-center" role="alert">
-            You have no active requests.
-        </div>
+    @if ($carts->isEmpty())
+        <div class="alert alert-info">You have no requests at the moment.</div>
     @else
-        <div class="row">
-            @foreach($carts as $cart)
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card shadow-lg border-0 rounded-lg">
-                        <div class="card-body">
-                            <h5 class="card-title text-primary mb-3">Request ID: {{ $cart->id }}</h5>
-                            <p class="card-text text-muted mb-3">
-                                <strong>Date:</strong> {{ $cart->created_at->format('M d, Y h:i A') }}<br>
-                                <strong>Status:</strong>
-                            </p>
-                            <!-- Progress Bar -->
-                            <div class="progress mb-3 custom-progress-bar">
-                                <div class="progress-bar {{ getProgressBarClass($cart->status) }}"
-                                     role="progressbar"
-                                     style="width: {{ getStatusPercentage($cart->status) }}%;"
-                                     aria-valuenow="{{ getStatusPercentage($cart->status) }}"
-                                     aria-valuemin="0"
-                                     aria-valuemax="100">
-                                    <span class="progress-bar-text">
-                                        {{ getStatusPercentage($cart->status) }}%
-                                    </span>
-                                </div>
-                            </div>
-                            <a href="{{ route('requests.showRequestProgress', $cart->id) }}" class="btn btn-primary">More Details</a>
-                        </div>
-                    </div>
+        @foreach ($carts->sortByDesc('created_at') as $cart)
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Request #{{ $cart->id }}</h5>
+                    <p class="card-title">Status : {{ ucfirst($cart->status) }}</p>
                 </div>
-            @endforeach
-        </div>
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Items in this Request</h6>
+                    @if ($cart->items->isEmpty())
+                        <p>No items in this request.</p>
+                    @else
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Item</th>
+                                    <th>Size</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($cart->items as $item)
+                                    <tr>
+                                        <td>
+                                            <img src="{{ asset('storage/' . $item->item->image) }}" alt="{{ $item->item->name }}" style="width: 100px; height: auto; border-radius: 8px;">
+                                        </td>
+                                        <td>{{ $item->item->name }}</td>
+                                        <td>{{ $item->size }}</td>
+                                        <td>{{ $item->quantity }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+                <div class="card-footer text-muted">
+                    Requested on: {{ $cart->created_at->format('d M Y, H:i') }}
+                </div>
+            </div>
+        @endforeach
     @endif
 </div>
 @endsection
-
-@php
-function getStatusPercentage($status) {
-    $percentages = [
-        'pending' => 14,
-        'reviewed' => 28,
-        'approved' => 42,
-        'processed' => 57,
-        'shipped' => 71,
-        'delivered' => 85,
-        'completed' => 100
-    ];
-
-    return $percentages[$status] ?? 0;
-}
-
-function getProgressBarClass($status) {
-    $classes = [
-        'pending' => 'bg-warning',
-        'reviewed' => 'bg-warning',
-        'approved' => 'bg-warning',
-        'processed' => 'bg-warning',
-        'shipped' => 'bg-warning',
-        'delivered' => 'bg-warning',
-        'completed' => 'bg-success'
-    ];
-
-    return $classes[$status] ?? 'bg-light';
-}
-@endphp

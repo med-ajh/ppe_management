@@ -1,41 +1,54 @@
 <?php
+// app/Http/Controllers/CartController.php
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
-use Auth;
 
 class CartController extends Controller
 {
-    // Add item to the cart
-    public function addToCart(Request $request)
+    public function show()
     {
-        $validated = $request->validate([
-            'item_id' => 'required|exists:items,id',
-            'quantity' => 'required|integer|min:1',
-            'size' => 'nullable|string',
-        ]);
+        $cart = Cart::where('user_id', Auth::id())
+                    ->where('status', 'pending')
+                    ->with('items.item') // Eager load items with their associated item model
+                    ->first();
 
-        $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)
-                    ->where('item_id', $validated['item_id'])
+        if (!$cart) {
+            return response()->json(['items' => []]);
+        }
+
+        return response()->json(['items' => $cart->items]);
+    }
+
+    public function confirmRequests(Request $request)
+    {
+        $cart = Cart::where('user_id', Auth::id())
+                    ->where('status', 'pending')
+                    ->with('items') // Eager load items
                     ->first();
 
         if ($cart) {
-            // Update quantity if the item is already in the cart
-            $cart->quantity += $validated['quantity'];
-            $cart->size = $validated['size'];
-            $cart->save();
-        } else {
-            // Create a new cart entry
-            Cart::create([
-                'user_id' => $user->id,
-                'item_id' => $validated['item_id'],
-                'quantity' => $validated['quantity'],
-                'size' => $validated['size'],
-            ]);
+            if ($cart->items()->count() > 0) {
+                // Update the cart status and clear the items
+                $cart->status = 'pending'; // Or 'pending' if you don't want to change the status
+                $cart->save();
+
+                // Clear the cart items
+                $cart->items()->delete();
+
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['error' => 'Cart is empty'], 400);
+            }
         }
 
-        return redirect()->route('requests.create')->with('success', 'Item added to cart.');
+        return response()->json(['error' => 'Cart not found'], 404);
     }
 }
+
+
+
+
+?>

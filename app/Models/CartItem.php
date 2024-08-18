@@ -1,7 +1,4 @@
 <?php
-
-// app/Models/CartItem.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,11 +15,9 @@ class CartItem extends Model
         return $this->belongsTo(Item::class);
     }
 
-
     public function cart()
     {
         return $this->belongsTo(Cart::class);
     }
-
-
 }
+?>
