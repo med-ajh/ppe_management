@@ -1,5 +1,3 @@
-<!-- resources/views/requests/index.blade.php -->
-
 @extends('layouts.user_type.auth')
 
 
