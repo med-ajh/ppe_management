@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\ValueStream;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
@@ -22,6 +23,14 @@ class DepartmentController extends Controller
         return view('departments.index', [
             'departments' => $departments,
         ]);
+    }
+    public function show($id)
+    {
+        // Find the department by ID
+        $department = Department::findOrFail($id);
+
+        // Return the view with the department data
+        return view('departments.show', compact('department'));
     }
 
     // Show the form for creating a new department
@@ -50,10 +59,14 @@ class DepartmentController extends Controller
     // Show the form for editing the specified department
     public function edit(Department $department)
     {
+        $managers = User::where('role', 'manager')->get(); // Fetch managers assuming they have a role 'manager'
+
         $valueStreams = ValueStream::all();
         return view('departments.edit', [
             'department' => $department,
             'valueStreams' => $valueStreams,
+            'managers' => $managers, // Pass managers to the view
+
         ]);
     }
 

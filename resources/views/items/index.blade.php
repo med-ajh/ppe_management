@@ -7,42 +7,73 @@
         max-width: 100px;
         height: auto;
         border-radius: 5px;
+        transition: transform 0.3s ease-in-out;
     }
+
+    .small-avatar:hover {
+        transform: scale(1.5);
+        z-index: 2;
+    }
+
+    .table-responsive {
+        margin-top: 20px;
+    }
+
+    .table tbody tr {
+        transition: transform 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
+
+    .table tbody tr:hover {
+        transform: translateX(10px);
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
     .icon-actions {
         display: flex;
         gap: 10px;
         align-items: center;
     }
+
     .icon-button {
         border: none;
         background: none;
         cursor: pointer;
         color: #6c757d;
+        transition: color 0.3s ease;
     }
+
     .icon-button i {
         font-size: 18px;
     }
+
     .icon-button:hover {
         color: #ff8000;
     }
+
     .search-form {
         display: flex;
         gap: 10px;
         align-items: center;
     }
+
     .search-form .form-control {
         flex: 1;
         margin-right: 10px;
     }
+
     .search-form .btn {
         flex-shrink: 0;
         margin: 0;
     }
+
     .add-item-btn {
         margin-bottom: 15px;
         display: flex;
         justify-content: flex-end;
     }
+
     .status-icon {
         width: 15px;
         height: 15px;
@@ -50,26 +81,28 @@
         display: inline-block;
         margin-right: 5px;
     }
+
     .status-available {
         background-color: green;
     }
+
     .status-not-available {
         background-color: red;
     }
+
     .status-pending {
         background-color: orange;
     }
+
     .table thead th {
         font-size: 12px;
         text-transform: uppercase;
         color: #6c757d;
     }
+
     .table td {
         vertical-align: middle;
         font-size: 14px;
-    }
-    .table-responsive {
-        margin-top: 20px;
     }
 </style>
 
@@ -109,7 +142,6 @@
                     <td>
                         <p class="text-xs font-weight-bold mb-0">{{ $item->name }}</p>
                     </td>
-
                     <td>
                         <span class="status-icon
                             @if($item->status == 'available') status-available

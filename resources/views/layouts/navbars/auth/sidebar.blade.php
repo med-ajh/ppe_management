@@ -187,7 +187,7 @@
 
 
               <li class="nav-item">
-                <a class="nav-link {{ (Request::is('departements') ? 'active' : '') }}" href="{{ url('departements') }}">
+                <a class="nav-link {{ (Request::is('departments') ? 'active' : '') }}" href="{{ url('departments') }}">
                   <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                     <i class="fas fa-building"></i>
                   </div>

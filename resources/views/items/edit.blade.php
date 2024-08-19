@@ -2,13 +2,11 @@
 
 @section('content')
 
-<!-- Add the necessary CSS files manually -->
 <link href="{{ asset('assets/css/nucleo-icons.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/soft-ui-dashboard.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/soft-ui-dashboard.css.map') }}" rel="stylesheet" />
 
-<!-- Your edit form -->
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
