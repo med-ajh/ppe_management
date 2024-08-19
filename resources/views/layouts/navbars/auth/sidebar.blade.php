@@ -177,7 +177,7 @@
 
 
               <li class="nav-item">
-                <a class="nav-link {{ (Request::is('value-streams') ? 'active' : '') }}" href="{{ url('value-streams') }}">
+                <a class="nav-link {{ (Request::is('valueStreams') ? 'active' : '') }}" href="{{ url('valueStreams') }}">
                   <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                     <i class="fas fa-cogs"></i>
                   </div>

@@ -67,16 +67,13 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
 // Routes for Employee
 Route::middleware(['auth', 'role:employee'])->group(function () {
     Route::get('/employee/dashboard', [EmployeeDashboardController::class, 'index'])->name('employee.dashboard');
-    // Add other employee routes here
 });
 
-// Authenticated routes
 Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
 
-
-    Route::resource('valuestreams', ValueStreamController::class);
+    Route::resource('valueStreams', ValueStreamController::class);
     Route::resource('departments', DepartmentController::class);
 
 
