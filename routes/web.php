@@ -86,16 +86,16 @@ Route::get('requests/history', [RequestController::class, 'history'])->name('req
 Route::get('requests/progress/{cartId}', [RequestController::class, 'showRequestProgress'])->name('requests.progress');
 Route::get('requests/follow', [RequestController::class, 'followRequest'])->name('requests.follow');
 
-// Cart routes
-Route::get('cart/show', [CartController::class, 'show'])->name('cart.show');
-Route::post('cart/confirm', [CartController::class, 'confirmRequests'])->name('cart.confirmRequests');
-
-
-Route::get('/cart/show', [CartController::class, 'show'])->name('cart.show');
-Route::post('/cart/confirm', [CartController::class, 'confirmRequests'])->name('cart.confirmRequests');
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout');
+
+
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/process', [CartController::class, 'processRequest'])->name('cart.processRequest');
+    Route::delete('/cart/item/{cartItemId}', [CartController::class, 'removeItem'])->name('cart.removeItem');
+    Route::put('/cart/item/{itemId}', [CartController::class, 'updateItem'])->name('cart.updateItem');
+    Route::post('/cart/cancel', [CartController::class, 'cancelRequest'])->name('cart.cancelRequest');
 
 
 

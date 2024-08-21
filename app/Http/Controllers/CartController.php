@@ -2,100 +2,97 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
+use App\Models\CartItem;
+use App\Models\ValueStream;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Cart;
-use App\Models\Department;
-use App\Models\ValueStream;
 
 class CartController extends Controller
 {
-    // Method to show the cart where user can choose value stream and department
+    // Display the cart and available options for the user
     public function index()
     {
-        $cart = Cart::where('user_id', Auth::id())
-                    ->where('status', 'pending')
-                    ->with('items.item') // Eager load items with their associated item model
-                    ->first();
+        $cart = Cart::firstOrCreate(
+            ['user_id' => Auth::id(), 'status' => 'pending'],
+            ['status' => 'pending']
+        );
 
-        $departments = Department::all();
+        $cartItems = $cart->items;
         $valueStreams = ValueStream::all();
+        $departments = Department::all();
 
-        return view('cart.index', compact('cart', 'departments', 'valueStreams'));
+        return view('cart.index', compact('cart', 'cartItems', 'valueStreams', 'departments'));
     }
 
-    public function show()
+    // Process the request and update the cart with additional information
+    public function processRequest(Request $request)
     {
-        $cart = Cart::where('user_id', Auth::id())
-                    ->where('status', 'pending')
-                    ->with('items.item') // Eager load items with their associated item model
-                    ->first();
+        $validatedData = $request->validate([
+            'value_stream_id' => 'required|exists:value_streams,id',
+            'department_id' => 'required|exists:departments,id',
+            'cost_center' => 'required|string',
+        ]);
 
-        if (!$cart) {
-            return response()->json(['items' => []]);
-        }
+        $cart = Cart::where('user_id', Auth::id())->where('status', 'pending')->firstOrFail();
 
-        return response()->json(['items' => $cart->items]);
+        $cart->update([
+            'value_stream_id' => $validatedData['value_stream_id'],
+            'department_id' => $validatedData['department_id'],
+            'cost_center' => $validatedData['cost_center'],
+            'status' => 'confirmed', // or your desired status
+        ]);
+
+        return redirect()->route('requests.follow')->with('success', 'Request confirmed successfully!');
     }
 
-    public function confirmRequests(Request $request)
+
+
+
+
+    // Remove an item from the cart
+    public function removeItem($cartItemId)
     {
-        $cart = Cart::where('user_id', Auth::id())
-                    ->where('status', 'pending')
-                    ->with('items') // Eager load items
-                    ->first();
+        $cartItem = CartItem::where('id', $cartItemId)->firstOrFail();
+        $cartItem->delete();
 
-        if ($cart) {
-            if ($cart->items()->count() > 0) {
-                // Update the cart status and clear the items
-                $cart->status = 'pending'; // Or 'pending' if you don't want to change the status
-                $cart->save();
-
-                // Clear the cart items
-                $cart->items()->delete();
-
-                return response()->json(['success' => true]);
-            } else {
-                return response()->json(['error' => 'Cart is empty'], 400);
-            }
-        }
-
-        return response()->json(['error' => 'Cart not found'], 404);
+        return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
     }
 
-    // Method to handle cart completion and choosing department and value stream
-    public function complete(Request $request)
+    // Edit an item in the cart
+    public function editItem($itemId)
     {
-        $cart = Cart::where('user_id', Auth::id())
-                    ->where('status', 'pending')
-                    ->first();
+        $cart = Cart::where('user_id', Auth::id())->where('status', 'pending')->firstOrFail();
+        $cartItem = CartItem::where('cart_id', $cart->id)->where('item_id', $itemId)->firstOrFail();
 
-        if ($cart) {
-            $cart->department_id = $request->department_id;
-            $cart->value_stream_id = $request->value_stream_id;
-            $cart->cost_center = Department::find($request->department_id)->cost_center;
-            $cart->status = 'completed'; // Mark the cart as completed
-            $cart->save();
-
-            return redirect()->route('carts.index')->with('success', 'Request completed successfully.');
-        }
-
-        return redirect()->back()->with('error', 'Cart not found.');
+        return view('cart.edit', compact('cartItem'));
     }
 
-    // Method to delete an item from the cart
-    public function deleteItem($itemId)
+    // Update an item in the cart
+    public function updateItem(Request $request, $itemId)
     {
-        $cart = Cart::where('user_id', Auth::id())
-                    ->where('status', 'pending')
-                    ->first();
+        $validatedData = $request->validate([
+            'size' => 'required|string',
+            'quantity' => 'required|integer|min:1',
+        ]);
 
-        if ($cart) {
-            $cart->items()->where('item_id', $itemId)->delete();
-            return response()->json(['success' => true]);
-        }
+        $cartItem = CartItem::findOrFail($itemId);
 
-        return response()->json(['error' => 'Cart not found'], 404);
+        $cartItem->update([
+            'size' => $validatedData['size'],
+            'quantity' => $validatedData['quantity'],
+        ]);
+
+        return redirect()->route('cart.index')->with('success', 'Item updated successfully.');
+    }
+
+    // Cancel the request and clear the cart
+    public function cancelRequest()
+    {
+        $cart = Cart::where('user_id', Auth::id())->where('status', 'pending')->firstOrFail();
+        $cart->items()->delete();
+
+        return redirect()->route('requests.index')->with('success', 'Request cancelled and cart cleared.');
     }
 }
-?>

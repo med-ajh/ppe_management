@@ -20,9 +20,9 @@
                 <!-- Cart content will be loaded here -->
             </div>
             <hr class="horizontal dark my-sm-4">
-            <form id="cart-confirm-form" action="{{ route('cart.confirmRequests') }}" method="POST">
+            <form id="cart-confirm-form" action="{{ route('cart.index') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn bg-gradient-dark w-100">Confirm Requests</button>
+                <button type="submit" class="btn bg-gradient-dark w-100">Complete your Request</button>
             </form>
         </div>
     </div>
@@ -44,7 +44,7 @@ $(document).ready(function() {
     });
 
     function loadCart() {
-        $.get('{{ route('cart.show') }}', function(data) {
+        $.get('{{ route('cart.index') }}', function(data) {
             let html = '';
             let uniqueItemCount = data.items.length; // Count of unique items
 
@@ -92,8 +92,8 @@ $(document).ready(function() {
 
         $.post($(this).attr('action'), $(this).serialize(), function(response) {
             if (response.success) {
-                alert('Requests confirmed!');
-                window.location.href = '{{ route('requests.follow') }}'; // Redirect to requests/follow view
+                alert('Are you sure ?!');
+                window.location.href = '{{ route('cart.index') }}'; // Redirect to requests/follow view
             } else {
                 alert('Failed to confirm requests: ' + (response.error || 'Unknown error'));
             }

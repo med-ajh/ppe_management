@@ -14,7 +14,7 @@ class Cart extends Model
         'status',
         'cost_center',
         'department_id',
-        'value_stream_id', 
+        'value_stream_id',
     ];
 
     public function items()
