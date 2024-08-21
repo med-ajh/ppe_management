@@ -19,4 +19,9 @@ class Department extends Model
     {
         return $this->hasMany(User::class);
     }
+    
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
 }

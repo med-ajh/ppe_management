@@ -4,43 +4,70 @@
 
 <style>
     .small-avatar {
-        max-width: 50px; /* Adjust size as needed */
-        height: auto; /* Maintain aspect ratio */
+        max-width: 50px;
+        height: auto;
+        border-radius: 50%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .small-avatar:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     .icon-actions {
         display: flex;
-        gap: 10px; /* Adjust spacing as needed */
-        align-items: center; /* Align buttons */
+        gap: 12px;
+        align-items: center;
     }
     .icon-button {
         border: none;
         background: none;
         cursor: pointer;
-        color: #6c757d; /* Gray color */
-    }
-    .icon-button i {
-        font-size: 16px; /* Adjust size as needed */
+        color: #6c757d;
+        transition: color 0.3s ease, transform 0.3s ease;
+        font-size: 18px;
     }
     .icon-button:hover {
-        color: #ff8000; /* Darker gray on hover */
+        color: #ff8000;
+        transform: scale(1.1);
     }
     .search-form {
         display: flex;
-        gap: 10px; /* Space between elements */
+        gap: 12px;
         align-items: center;
     }
     .search-form .form-control {
-        flex: 1; /* Allow inputs to grow */
-        margin-right: 10px; /* Add space between inputs and button */
+        flex: 1;
+        margin-right: 12px;
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .search-form .btn {
-        flex-shrink: 0; /* Prevent button from shrinking */
-        margin: 0; /* Remove any default margin */
+        flex-shrink: 0;
+        margin: 0;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .search-form .btn:hover {
+        background-color: #004085;
     }
     .add-user-btn {
         margin-bottom: 15px;
         display: flex;
         justify-content: flex-end;
+    }
+    .table thead th {
+        background-color: #f8f9fa;
+        color: #343a40;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .table tbody tr:hover {
+        background-color: #e2e6ea;
     }
 </style>
 
@@ -122,7 +149,6 @@
                             {{ $user->cost_center ?? '-' }}
                         </span>
                     </td>
-
 
                     <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">

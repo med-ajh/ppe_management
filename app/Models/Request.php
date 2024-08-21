@@ -17,4 +17,10 @@ class Request extends Model
     {
         return $this->belongsTo(Item::class);
     }
+    
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
 }

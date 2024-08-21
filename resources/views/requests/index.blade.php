@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container">
-    <h1 class="my-4 text-center">Available Items</h1>
     <div class="row g-4 justify-content-center">
         @foreach($items as $item)
         <div class="col-md-4 d-flex align-items-stretch">
@@ -47,12 +46,12 @@
 
 <style>
     .card-hover {
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .card-hover:hover {
-        transform: translateY(-15px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        transform: translateY(-10px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
     }
 
     .card-img-container {
@@ -68,57 +67,51 @@
         max-width: 100%;
         max-height: 100%;
         object-fit: contain;
-        transition: transform 0.4s ease, filter 0.4s ease;
-        filter: grayscale(100%);
+        transition: transform 0.3s ease;
     }
 
     .card-hover:hover .card-img-container img {
-        transform: scale(1.1);
-        filter: grayscale(0%);
+        transform: scale(1.05);
     }
 
     .form-range {
         appearance: none;
         background: #e9ecef;
-        height: 10px;
-        border-radius: 5px;
+        height: 8px;
+        border-radius: 4px;
         cursor: pointer;
         margin-bottom: 8px;
     }
 
     .form-range::-webkit-slider-thumb {
         appearance: none;
-        width: 30px;
-        height: 30px;
-        background: #ff8000; /* Orange color */
+        width: 24px;
+        height: 24px;
+        background: #ff6f00; /* Orange color */
         border-radius: 50%;
         cursor: pointer;
-        transition: background 0.4s ease, transform 0.4s ease;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: background 0.3s ease;
     }
 
     .form-range::-webkit-slider-thumb:hover {
-        background: #e67300; /* Darker orange color */
-        transform: scale(1.2);
+        background: #e65c00; /* Darker orange color */
     }
 
     .form-output {
         display: block;
         font-size: 1.2em;
         margin-top: 5px;
-        color: #ff8000; /* Orange color */
+        color: #ff6f00; /* Orange color */
     }
 
     .btn-primary {
-        background-color: #ff8000; /* Orange color */
-        border-color: #ff8000; /* Orange color */
-        transition: background-color 0.4s ease, box-shadow 0.4s ease;
+        background-color: #ff6f00; /* Orange color */
+        border-color: #ff6f00; /* Orange color */
     }
 
     .btn-primary:hover {
-        background-color: #e67300; /* Darker orange color */
-        border-color: #e67300; /* Darker orange color */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: #e65c00; /* Darker orange color */
+        border-color: #e65c00; /* Darker orange color */
     }
 </style>
 @endsection
