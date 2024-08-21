@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\CartItem;
 use App\Models\Item;
+use App\Models\CartItem;
+use App\Models\Department;
+use App\Models\ValueStream;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,8 +18,6 @@ class RequestController extends Controller
         $items = Item::all();
         return view('requests.index', compact('items'));
     }
-
-    
 
     // Store the request for an item in the cart
     public function store(Request $request)
@@ -53,21 +53,27 @@ class RequestController extends Controller
         return redirect()->route('requests.index')->with('success', 'Item added to cart!');
     }
 
-    // Show cart requests that are not completed
     public function followRequest()
     {
         $carts = Cart::where('user_id', Auth::id())
-            ->where('status', '!=', 'completed')
-            ->get();
+        ->where('status', '!=', 'pending')
+        ->get();
 
-        return view('requests.follow', compact('carts'));
+        $valueStreams = ValueStream::all();
+        $departments = Department::all();  // Fetch departments including their cost centers
+
+        return view('requests.follow', [
+            'carts' => $carts,
+            'valueStreams' => $valueStreams,
+            'departments' => $departments,
+        ]);
     }
 
     // Show request history
     public function history()
     {
         $carts = Cart::where('user_id', Auth::id())
-            ->where('status', 'completed')
+            ->where('status', 'Confirmed')
             ->get();
 
         return view('requests.history', compact('carts'));
@@ -82,6 +88,7 @@ class RequestController extends Controller
 
         $approvalSteps = [
             'pending',
+            'confirmed',
             'reviewed',
             'approved',
             'processed',
@@ -117,5 +124,3 @@ class RequestController extends Controller
         return view('requests.admin.show', compact('cart'));
     }
 }
-
-?>
